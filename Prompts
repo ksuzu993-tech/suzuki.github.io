@@ -246,6 +246,17 @@
     gap: 12px; align-items: center; justify-content: space-between;
     background: rgba(31, 24, 20, 0.04);
     border-bottom: 1px dotted rgba(31, 24, 20, 0.25);
+    scroll-margin-top: 80px;
+    transition: background .4s ease;
+  }
+  .prompt-card__actions.is-highlight {
+    background: rgba(201, 164, 73, 0.35);
+    animation: highlightPulse 1.6s ease;
+  }
+  @keyframes highlightPulse {
+    0%   { background: rgba(31, 24, 20, 0.04); }
+    20%  { background: rgba(201, 164, 73, 0.45); }
+    100% { background: rgba(31, 24, 20, 0.04); }
   }
   .prompt-card__meta {
     font-family: "JetBrains Mono", monospace; font-size: 10px;
@@ -571,11 +582,11 @@
 <div class="index-nav-wrap">
   <div class="index-nav">
     <span class="index-nav__label">Index</span>
-    <a href="#gem-01" class="index-nav__item"><span>I</span>種まき編集者</a>
-    <a href="#gem-02" class="index-nav__item"><span>II</span>辛口編集長</a>
-    <a href="#gem-03" class="index-nav__item"><span>III</span>キャラの番人</a>
-    <a href="#gem-04" class="index-nav__item"><span>IV</span>画作りの相棒</a>
-    <a href="#gem-05" class="index-nav__item"><span>V</span>アカウントの参謀</a>
+    <a href="#download-01" class="index-nav__item"><span>I</span>種まき編集者</a>
+    <a href="#download-02" class="index-nav__item"><span>II</span>辛口編集長</a>
+    <a href="#download-03" class="index-nav__item"><span>III</span>キャラの番人</a>
+    <a href="#download-04" class="index-nav__item"><span>IV</span>画作りの相棒</a>
+    <a href="#download-05" class="index-nav__item"><span>V</span>アカウントの参謀</a>
   </div>
 </div>
 
@@ -596,7 +607,7 @@
       <strong>役割</strong>
       日々の出来事や思いつきを雑談ベースで投げると、ベテラン編集者の眼で「4コマに育つ可能性のある種」に変換してくれるGem。3つの種と育てるヒントを毎回返してくれます。
     </div>
-    <div class="prompt-card__actions">
+    <div class="prompt-card__actions" id="download-01">
       <div class="prompt-card__meta">FILE: <strong>gem-01-idea-gardener.txt</strong></div>
       <div class="prompt-card__buttons">
         <button class="btn btn--primary" data-copy="prompt-01">
@@ -684,7 +695,7 @@
       <strong>役割</strong>
       作りかけ・完成済みの4コマを見せると、30年キャリアのベテラン編集者の視点で「起承転結」「オチの強度」「キャラの立ち」「読後感」を10点満点で採点し、磨き方を3案で提示してくれるGem。
     </div>
-    <div class="prompt-card__actions">
+    <div class="prompt-card__actions" id="download-02">
       <div class="prompt-card__meta">FILE: <strong>gem-02-sharp-editor.txt</strong></div>
       <div class="prompt-card__buttons">
         <button class="btn btn--primary" data-copy="prompt-02">
@@ -793,7 +804,7 @@ C案：（思い切って構造を変える方向性）
       <strong>役割</strong>
       登場キャラを「カルテ」として登録すると、性格・口調・価値観を記憶し、その後の脚本でキャラがブレないよう監修してくれるGem。一致度◯◯%で診断し、設定に沿った代案を提示してくれます。
     </div>
-    <div class="prompt-card__actions">
+    <div class="prompt-card__actions" id="download-03">
       <div class="prompt-card__meta">FILE: <strong>gem-03-character-keeper.txt</strong></div>
       <div class="prompt-card__buttons">
         <button class="btn btn--primary" data-copy="prompt-03">
@@ -911,7 +922,7 @@ C案：（思い切って構造を変える方向性）
       <strong>役割</strong>
       完成した脚本を貼ると、4コマすべての画像生成プロンプトを「画風・構図・ライティング・感情の温度」の4要素で組み立ててくれるGem。Imagen / Midjourney / NanoBanana / SD すべてに対応。
     </div>
-    <div class="prompt-card__actions">
+    <div class="prompt-card__actions" id="download-04">
       <div class="prompt-card__meta">FILE: <strong>gem-04-art-director.txt</strong></div>
       <div class="prompt-card__buttons">
         <button class="btn btn--primary" data-copy="prompt-04">
@@ -1022,7 +1033,7 @@ C案：（思い切って構造を変える方向性）
       <strong>役割</strong>
       完成した4コマを見せると、SNS運用歴10年のストラテジスト視点で投稿時間・投稿文3案・ハッシュタグ戦略・拡散の仕掛け・リスク分析まで一気通貫で考えてくれるGem。アカウント全体の3ヶ月戦略も相談可能。
     </div>
-    <div class="prompt-card__actions">
+    <div class="prompt-card__actions" id="download-05">
       <div class="prompt-card__meta">FILE: <strong>gem-05-strategist.txt</strong></div>
       <div class="prompt-card__buttons">
         <button class="btn btn--primary" data-copy="prompt-05">
@@ -1226,6 +1237,29 @@ C案（自虐型）：（実際の文面）
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2400);
   }
+
+  // === Highlight on landing (URL hash → action bar) ===
+  function highlightFromHash() {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const target = document.querySelector(hash);
+    if (!target) return;
+    if (!target.classList.contains('prompt-card__actions')) return;
+    // 少し待ってからスクロール（描画完了後）
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // ハイライトアニメーション
+      target.classList.remove('is-highlight');
+      void target.offsetWidth; // reflow to restart animation
+      target.classList.add('is-highlight');
+      setTimeout(() => target.classList.remove('is-highlight'), 1700);
+    }, 100);
+  }
+
+  // ページ読み込み時
+  window.addEventListener('load', highlightFromHash);
+  // ハッシュ変更時（同ページ内で別Gemに飛ぶケース）
+  window.addEventListener('hashchange', highlightFromHash);
 </script>
 
 </body>
